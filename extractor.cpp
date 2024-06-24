@@ -333,8 +333,14 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    const std::string CFG_FILE_NAME = "cfg.txt";
-    const std::string FEATURES_FILE_NAME = "features.txt";
+    std::string BASE_FILE_NAME = argv[1];
+    size_t last_dot = BASE_FILE_NAME.find_last_of('.');
+    if (last_dot != std::string::npos) {
+        BASE_FILE_NAME = BASE_FILE_NAME.substr(0, last_dot);
+    }
+
+    const std::string CFG_FILE_NAME = BASE_FILE_NAME + "-cfg.txt";
+    const std::string FEATURES_FILE_NAME = BASE_FILE_NAME + "-features.txt";
 
     FeatureExtractionPass fep(CFG_FILE_NAME, FEATURES_FILE_NAME);
     fep.open();
