@@ -1,4 +1,6 @@
 import os
+import argparse
+
 
 def list_cpp_files(start_dir):
     cpp_files = []
@@ -11,7 +13,13 @@ def list_cpp_files(start_dir):
     return cpp_files, cpp_files_size
 
 if __name__ == "__main__":
-    cpp_files, cpp_files_size = list_cpp_files("data")
+    parser = argparse.ArgumentParser(description='Script to construct the dataset')
+    parser.add_argument('rawdata_dir', type=str)
+    parser.add_argument("max_num_source_files", type=100)
+    args = parser.parse_args()
+
+    cpp_files, cpp_files_size = list_cpp_files(args.rawdata_dir)
     cpp_files_size, cpp_files = map(list, zip(*sorted(zip(cpp_files_size, cpp_files))))
-    print(cpp_files[-10:])
-    print(cpp_files_size[-10:])
+
+    for p in cpp_files[-1 * args.max_num_source_files:]:
+        pass
