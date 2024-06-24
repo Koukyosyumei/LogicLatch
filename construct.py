@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import subprocess
+import glob
 import argparse
 
 
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script to construct the dataset")
     parser.add_argument("-rawdata_dir", type=str, default="data")
     parser.add_argument("-max_num_source_files", type=int, default=1)
-    parser.add_argument("-timeout", type=int, default=10)
+    parser.add_argument("-timeout", type=int, default=5)
     args = parser.parse_args()
 
     cpp_files, cpp_files_size = list_cpp_files(args.rawdata_dir)
@@ -28,39 +29,27 @@ if __name__ == "__main__":
     for p in cpp_files[-1 * args.max_num_source_files :]:
         subprocess.run(["sh", "extractor.sh", p], capture_output=False, text=True)
         subprocess.run(["sh", "instrument.sh", p], capture_output=False, text=True)
-        subprocess.run(
-            [
-                "afl-fuzz",
-                "-i",
-                "../afl-tutorial/afl-2.52b/testcases/others/text/",
-                "-V",
-                str(args.timeout),
-                "-Q",
-                "-o",
-                p.split(".")[0] + "_out/",
-                p.split(".")[0],
-            ],
-            capture_output=False, text=True
-        )
-        subprocess.run(
-            [
-                "afl-fuzz",
-                "-i",
-                "../afl-tutorial/afl-2.52b/testcases/others/text/",
-                "-V",
-                str(args.timeout),
-                "-Q",
-                "-o",
-                p.split(".")[0] + "_sleep_out/",
-                p.split(".")[0] + "_sleep",
-            ],
-            capture_output=False, text=True
-        )
 
-        output_files = [p.split(".")[0] + "_out/default/fuzzer_stats",
-                        p.split(".")[0] + "_sleep_out/default/fuzzer_stats"]
+        exe_files = glob.glob(os.path.join(p.split(".")[0], "*.o"))
+        for e in exe_files:
+            subprocess.run(
+                [
+                    "afl-fuzz",
+                    "-i",
+                    "../afl-tutorial/afl-2.52b/testcases/others/text/",
+                    "-V",
+                    str(args.timeout),
+                    "-Q",
+                    "-o",
+                    e + "_out/",
+                    e,
+                ],
+                capture_output=False, text=True
+            )
+
         data = {"source":[], "output":[]}
-        for o in output_files:
+        for e in exe_files:
+            o = os.path.join(e + "_out/", "default/fuzzer_stats")
             data["source"].append(p)
             data["output"].append(o)
             with open(o, "r") as file:
