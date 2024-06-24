@@ -1,3 +1,4 @@
+import pandas as pd
 import os
 import subprocess
 import argparse
@@ -56,10 +57,20 @@ if __name__ == "__main__":
             capture_output=False, text=True
         )
 
-        """
-        data = {}
-        with open(input_file, "r") as file:
-            for line in file:
-                key, value = line.split(":", 1)
-                data[key.strip()] = value.strip()
-        """
+        output_files = [p.split(".")[0] + "_out/default/fuzzer_stats",
+                        p.split(".")[0] + "_sleep_out/default/fuzzer_stats"]
+        data = {"source":[], "output":[]}
+        for o in output_files:
+            data["source"].append(p)
+            data["output"].append(o)
+            with open(o, "r") as file:
+                for line in file:
+                    key, value = line.split(":", 1)
+                    key = key.strip()
+                    value = value.strip()
+                    if key not in data:
+                        data[key] = [value]
+                    else:
+                        data[key].append(value)
+
+        pd.DataFrame.from_dict(data).to_csv(p.split(".")[0] + ".csv", index=False)
