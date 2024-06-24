@@ -2,7 +2,7 @@
 
 ## Install
 
-```
+```bash
 sh ./build.sh
 ```
 
