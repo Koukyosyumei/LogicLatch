@@ -17,8 +17,16 @@ sh extractor.sh example/simple.cpp
 - instrument
 
 ```bash
-opt -enable-new-pm=0 -f -load ./build/libInsertSleepPass.so -insert-sleep -insert-sleep-seed 42 -insert-sleep-probability 0.5 -S -o example/simpl
-e_sleep.ll example/simple.ll
+clang++ -S -emit-llvm example/simple.cpp -o example/simple.ll
+opt -enable-new-pm=0 -f -load ./build/libInsertSleepPass.so -insert-sleep -insert-sleep-seed 42 -insert-sleep-probability 0.5 -S -o example/simple_sleep.ll example/simple.ll
+clang++ -o example/simple example/simple.ll
+clang++ -o example/simple_sleep example/simple_sleep.ll
+```
+
+- afl
+
+```bash
+afl-fuzz -i ../afl-tutorial/afl-2.52b/testcases/others/text/ -Q -o out/ example/simple_sleep
 ```
 
 ## Datasets

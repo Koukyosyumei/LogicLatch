@@ -22,7 +22,7 @@ namespace
     {
       LLVMContext &Context = M.getContext();
       IRBuilder<> Builder(Context);
-      FunctionCallee SleepFunc = M.getOrInsertFunction("sleep", FunctionType::get(Type::getInt32Ty(Context), {Type::getInt32Ty(Context)}, false));
+      FunctionCallee SleepFunc = M.getOrInsertFunction("usleep", FunctionType::get(Type::getInt32Ty(Context), {Type::getInt32Ty(Context)}, false));
 
       std::mt19937 RandomGenerator(Seed);
       std::uniform_real_distribution<double> Distribution(0.0, 1.0);
@@ -39,7 +39,7 @@ namespace
           {
             Instruction &FirstInst = *BB.getFirstInsertionPt();
             Builder.SetInsertPoint(&FirstInst);
-            Builder.CreateCall(SleepFunc, {Builder.getInt32(1)});
+            Builder.CreateCall(SleepFunc, {Builder.getInt32(10000)});
             modified = true;
           }
         }
