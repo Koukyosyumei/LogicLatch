@@ -136,14 +136,14 @@ struct FeatureExtractionPass
     {
         CFG_FILE.open(CFG_FILE_NAME, std::ios::out);
         FEATURES_FILE.open(FEATURES_FILE_NAME, std::ios::out);
-        FEATURES_FILE << "FunctionName" << ", " << "BasicBlockIndex" << ", " << "BasicBlockName" << ", " << "numInstructions" << ", "
-                      << "distanceFromEntry" << ", " << "numCalls" << ", " << "numLoads" << ", "
-                      << "numStores" << ", " << "numArith" << ", " << "numBranches" << ", "
-                      << "numCmp" << ", " << "numFP" << ", " << "numLogic" << ", "
-                      << "numMemAccess" << ", " << "numPhi" << ", " << "numRet" << ", " << "numPredecessors" << ", "
-                      << "numSuccessors" << ", " << "depth" << ", " << "loopNestLevel" << ", "
-                      << "numImmediates" << ", " << "numRegisters" << ", " << "numLocalVars" << ", "
-                      << "numGlobalVars" << ", " << "numCondBranches" << ", " << "numUncondBranches" << "\n";
+        FEATURES_FILE << "FunctionName" << "," << "BasicBlockIndex" << "," << "BasicBlockName" << "," << "numInstructions" << ","
+                      << "distanceFromEntry" << "," << "numCalls" << "," << "numLoads" << ","
+                      << "numStores" << "," << "numArith" << "," << "numBranches" << ","
+                      << "numCmp" << "," << "numFP" << "," << "numLogic" << ","
+                      << "numMemAccess" << "," << "numPhi" << "," << "numRet" << "," << "numPredecessors" << ","
+                      << "numSuccessors" << "," << "depth" << "," << "loopNestLevel" << ","
+                      << "numImmediates" << "," << "numRegisters" << "," << "numLocalVars" << ","
+                      << "numGlobalVars" << "," << "numCondBranches" << "," << "numUncondBranches" << "\n";
     }
 
     void close()
@@ -305,14 +305,14 @@ struct FeatureExtractionPass
             int depth, loopNestLevel, numImmediates, numRegisters;
             int numLocalVars, numGlobalVars, numCondBranches, numUncondBranches;
 
-            FEATURES_FILE << F.getName().str() << ", " << BlockIndex[&BB] << ", " << BB.getName().str() << ", " << bbf.numInstructions << ", "
-                          << bbf.distanceFromEntry << ", " << bbf.numCalls << ", " << bbf.numLoads << ", "
-                          << bbf.numStores << ", " << bbf.numArith << ", " << bbf.numBranches << ", "
-                          << bbf.numCmp << ", " << bbf.numFP << ", " << bbf.numLogic << ", "
-                          << bbf.numMemAccess << ", " << bbf.numPhi << ", " << bbf.numRet << ", " << bbf.numPredecessors << ", "
-                          << bbf.numSuccessors << ", " << bbf.depth << ", " << bbf.loopNestLevel << ", "
-                          << bbf.numImmediates << ", " << bbf.numRegisters << ", " << bbf.numLocalVars << ", "
-                          << bbf.numGlobalVars << ", " << bbf.numCondBranches << ", " << bbf.numUncondBranches << "\n";
+            FEATURES_FILE << F.getName().str() << "," << BlockIndex[&BB] << "," << BB.getName().str() << "," << bbf.numInstructions << ","
+                          << bbf.distanceFromEntry << "," << bbf.numCalls << "," << bbf.numLoads << ","
+                          << bbf.numStores << "," << bbf.numArith << "," << bbf.numBranches << ","
+                          << bbf.numCmp << "," << bbf.numFP << "," << bbf.numLogic << ","
+                          << bbf.numMemAccess << "," << bbf.numPhi << "," << bbf.numRet << "," << bbf.numPredecessors << ","
+                          << bbf.numSuccessors << "," << bbf.depth << "," << bbf.loopNestLevel << ","
+                          << bbf.numImmediates << "," << bbf.numRegisters << "," << bbf.numLocalVars << ","
+                          << bbf.numGlobalVars << "," << bbf.numCondBranches << "," << bbf.numUncondBranches << "\n";
 
             // Other features can be similarly computed...
         }
