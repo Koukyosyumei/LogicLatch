@@ -32,3 +32,10 @@ afl-fuzz -i ../afl-tutorial/afl-2.52b/testcases/others/text/ -Q -o out/ example/
 ## Datasets
 
 - [codeforces-code-dataset](https://www.kaggle.com/datasets/yeoyunsianggeremie/codeforces-code-dataset)
+
+
+```
+clang -emit-llvm -c -o program.bc program.ll
+AFL_USE_ASAN=1 afl-clang-fast -c -o program.o program.bc
+afl-clang-fast++ -o program program.o -fsanitize=address
+```
