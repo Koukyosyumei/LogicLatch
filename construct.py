@@ -18,7 +18,7 @@ def list_cpp_files(start_dir):
     return cpp_files, cpp_files_size
 
 
-def process_file(p, timeout):
+def process_file(p, timeout, default_dir):
     subprocess.run(["sh", "extractor.sh", p], capture_output=False, text=True)
     subprocess.run(["sh", "instrument.sh", p], capture_output=False, text=True)
 
@@ -28,7 +28,7 @@ def process_file(p, timeout):
             [
                 "afl-fuzz",
                 "-i",
-                "../afl-tutorial/afl-2.52b/testcases/others/text/",
+                default_dir,
                 "-V",
                 str(timeout),
                 "-o",
@@ -65,6 +65,7 @@ if __name__ == "__main__":
     parser.add_argument("-rawdata_dir", type=str, default="data")
     parser.add_argument("-max_num_source_files", type=int, default=1)
     parser.add_argument("-timeout", type=int, default=30)
+    parser.add_argument("-default_testcase", type=str, default="../afl-tutorial/afl-2.52b/testcases/others/text/")
     args = parser.parse_args()
 
     cpp_files, cpp_files_size = list_cpp_files(args.rawdata_dir)
@@ -74,7 +75,7 @@ if __name__ == "__main__":
 
     with ProcessPoolExecutor() as executor:
         futures = [
-            executor.submit(process_file, p, args.timeout) for p in files_to_process
+            executor.submit(process_file, p, args.timeout, args.default_testcase) for p in files_to_process
         ]
         for future in futures:
             result = future.result()

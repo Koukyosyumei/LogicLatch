@@ -5,30 +5,27 @@ target triple = "aarch64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress noinline norecurse nounwind optnone uwtable
 define dso_local noundef i32 @main(i32 noundef %0, i8** noundef %1) #0 {
-  %3 = call i32 @usleep(i32 10000)
+  %3 = alloca i32, align 4
   %4 = alloca i32, align 4
-  %5 = alloca i32, align 4
-  %6 = alloca i8**, align 8
-  %7 = alloca i32, align 4
-  store i32 0, i32* %4, align 4
-  store i32 %0, i32* %5, align 4
-  store i8** %1, i8*** %6, align 8
-  %8 = load i32, i32* %5, align 4
-  %9 = icmp eq i32 %8, 0
-  br i1 %9, label %10, label %12
+  %5 = alloca i8**, align 8
+  %6 = alloca i32, align 4
+  store i32 0, i32* %3, align 4
+  store i32 %0, i32* %4, align 4
+  store i8** %1, i8*** %5, align 8
+  %7 = load i32, i32* %4, align 4
+  %8 = icmp eq i32 %7, 0
+  br i1 %8, label %9, label %11
 
-10:                                               ; preds = %2
-  %11 = call i32 @usleep(i32 10000)
-  store i32 1, i32* %7, align 4
-  br label %14
+9:                                                ; preds = %2
+  %10 = call i32 @usleep(i32 30000)
+  store i32 1, i32* %6, align 4
+  br label %12
 
-12:                                               ; preds = %2
-  %13 = call i32 @usleep(i32 10000)
-  store i32 2, i32* %7, align 4
-  br label %14
+11:                                               ; preds = %2
+  store i32 2, i32* %6, align 4
+  br label %12
 
-14:                                               ; preds = %12, %10
-  %15 = call i32 @usleep(i32 10000)
+12:                                               ; preds = %11, %9
   ret i32 0
 }
 
