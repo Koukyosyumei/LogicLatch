@@ -21,6 +21,7 @@ clang++ -S -emit-llvm example/simple.cpp -o example/simple.ll
 opt -enable-new-pm=0 -f -load ./build/libInsertSleepPass.so -insert-sleep -insert-sleep-seed 42 -insert-sleep-probability 0.5 -S -o example/simple_sleep.ll example/simple.ll
 clang++ -o example/simple example/simple.ll
 clang++ -o example/simple_sleep example/simple_sleep.ll
+
 # afl-fuzz -i ../afl-tutorial/afl-2.52b/testcases/others/text/ -Q -o out/ example/simple_sleep
 ```
 
@@ -32,6 +33,8 @@ opt -enable-new-pm=0 -f -load ./build/libInsertSleepPass.so -insert-sleep -inser
 clang -emit-llvm -c -o example/simple_sleep.bc example/simple_sleep.ll
 AFL_USE_ASAN=1 afl-clang-fast -c -o example/simple_sleep.o example/simple_sleep.bc
 afl-clang-fast++ -o example/simple_sleep.out example/simple_sleep.o -fsanitize=address
+
+afl-fuzz -i ../afl-tutorial/afl-2.52b/testcases/others/text/ -o out/ example/simple_sleep
 ```
 
 ## Datasets
