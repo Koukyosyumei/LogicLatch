@@ -97,12 +97,8 @@ if __name__ == "__main__":
         type=str,
         default="../afl-tutorial/afl-2.52b/testcases/others/text/",
     )
-    parser.add_argument(
-        "--quiet_stdout", action='store_true'
-    )
-    parser.add_argument(
-        "--quiet_stderr", action='store_true'
-    )
+    parser.add_argument("--quiet_stdout", action="store_true")
+    parser.add_argument("--quiet_stderr", action="store_true")
     args = parser.parse_args()
 
     cpp_files, cpp_files_size = list_cpp_files(args.rawdata_dir)
@@ -127,8 +123,8 @@ if __name__ == "__main__":
                 args.timeout,
                 args.output_root_dir,
                 args.default_testcase,
-                args.quiet_stdout, 
-                args.quiet_stderr
+                args.quiet_stdout,
+                args.quiet_stderr,
             )
             for p in files_to_process
         ]
