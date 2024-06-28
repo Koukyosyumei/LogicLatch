@@ -338,10 +338,9 @@ int main(int argc, char **argv)
     if (last_dot != std::string::npos) {
         BASE_FILE_NAME = BASE_FILE_NAME.substr(0, last_dot);
     }
-    std::string OUTPUT_DIR = argv[2];
 
-    const std::string CFG_FILE_NAME = OUTPUT_DIR + BASE_FILE_NAME + "-cfg.txt";
-    const std::string FEATURES_FILE_NAME = OUTPUT_DIR + BASE_FILE_NAME + "-features.txt";
+    const std::string CFG_FILE_NAME = BASE_FILE_NAME + "-cfg.txt";
+    const std::string FEATURES_FILE_NAME = BASE_FILE_NAME + "-features.txt";
 
     FeatureExtractionPass fep(CFG_FILE_NAME, FEATURES_FILE_NAME);
     fep.open();
