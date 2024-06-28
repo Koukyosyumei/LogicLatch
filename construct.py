@@ -10,7 +10,7 @@ def list_cpp_files(start_dir):
     cpp_files_size = []
     for root, _, files in os.walk(start_dir):
         for file in files:
-            if file.endswith(".cpp"):
+            if root[-1] in ["D", "E", "F"] and file.endswith(".cpp"):
                 cpp_files.append(os.path.join(root, file))
                 cpp_files_size.append(os.path.getsize(os.path.join(root, file)))
     return cpp_files, cpp_files_size
@@ -20,28 +20,29 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script to construct the dataset")
     parser.add_argument("-rawdata_dir", type=str, default="data")
     parser.add_argument("-max_num_source_files", type=int, default=1)
-    parser.add_argument("-timeout", type=int, default=5)
+    parser.add_argument("-timeout", type=int, default=30)
     args = parser.parse_args()
 
     cpp_files, cpp_files_size = list_cpp_files(args.rawdata_dir)
     cpp_files_size, cpp_files = map(list, zip(*sorted(zip(cpp_files_size, cpp_files))))
 
-    for p in cpp_files[-1 * args.max_num_source_files :]:
+    for p in cpp_files[-10 * args.max_num_source_files :]:
         subprocess.run(["sh", "extractor.sh", p], capture_output=False, text=True)
         subprocess.run(["sh", "instrument.sh", p], capture_output=False, text=True)
 
-        exe_files = glob.glob(os.path.join(p.split(".")[0], "*.o"))
+        exe_files = glob.glob(os.path.join(p.split(".")[0], "*.out"))
         for e in exe_files:
             subprocess.run(
                 [
                     "afl-fuzz",
                     "-i",
                     "../afl-tutorial/afl-2.52b/testcases/others/text/",
+                    #"./data/1350/D/testcase/",
                     "-V",
                     str(args.timeout),
-                    "-Q",
+                    # "-Q",
                     "-o",
-                    e + "_out/",
+                    e + "_result/",
                     e,
                 ],
                 capture_output=False, text=True
@@ -49,17 +50,20 @@ if __name__ == "__main__":
 
         data = {"source":[], "output":[]}
         for e in exe_files:
-            o = os.path.join(e + "_out/", "default/fuzzer_stats")
-            data["source"].append(p)
-            data["output"].append(o)
-            with open(o, "r") as file:
-                for line in file:
-                    key, value = line.split(":", 1)
-                    key = key.strip()
-                    value = value.strip()
-                    if key not in data:
-                        data[key] = [value]
-                    else:
-                        data[key].append(value)
+            try:
+                o = os.path.join(e + "_result/", "default/fuzzer_stats")
+                data["source"].append(p)
+                data["output"].append(o)
+                with open(o, "r") as file:
+                    for line in file:
+                        key, value = line.split(":", 1)
+                        key = key.strip()
+                        value = value.strip()
+                        if key not in data:
+                            data[key] = [value]
+                        else:
+                            data[key].append(value)
+            except:
+                pass
 
         pd.DataFrame.from_dict(data).to_csv(p.split(".")[0] + ".csv", index=False)
