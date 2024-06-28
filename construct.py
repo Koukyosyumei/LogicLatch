@@ -71,7 +71,7 @@ if __name__ == "__main__":
     cpp_files, cpp_files_size = list_cpp_files(args.rawdata_dir)
     cpp_files_size, cpp_files = map(list, zip(*sorted(zip(cpp_files_size, cpp_files))))
 
-    files_to_process = cpp_files[-10 * args.max_num_source_files :]
+    files_to_process = cpp_files[-1 * args.max_num_source_files :]
 
     with ProcessPoolExecutor() as executor:
         futures = [
