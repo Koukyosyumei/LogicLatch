@@ -1,6 +1,13 @@
 # NeuroFuzzGuard
 
+
 ## Install
+
+### dependencies
+
+- LLVM: LLVM-14 or above
+
+### build
 
 ```bash
 sh ./build.sh

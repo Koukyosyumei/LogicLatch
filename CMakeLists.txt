@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.22.1)
 project(NFG)
 
 set(LLVM_INCLUDE_DIRS "/usr/include/llvm-14")
