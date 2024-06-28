@@ -7,8 +7,13 @@ if [ -z "$1" ]; then
 fi
 
 INPUT_FILE=$1
+OUTPUT_ROOT_DIR=$2
 
-clang++ -S -emit-llvm $INPUT_FILE -o "${INPUT_FILE%.*}.ll"
-llvm-as "${INPUT_FILE%.*}.ll" -o "${INPUT_FILE%.*}.bc"
+_bname=$(basename "$INPUT_FILE")
+FILE_BASENAME="${_bname%.*}"
+OUTPUT_DIR="${OUTPUT_ROOT_DIR}/${FILE_BASENAME}"
 
-./build/extractor "${INPUT_FILE%.*}.ll"
+clang++ -S -emit-llvm $INPUT_FILE -o "${OUTPUT_DIR}/${FILE_BASENAME}.ll"
+# llvm-as "${INPUT_FILE%.*}.ll" -o "${INPUT_FILE%.*}.bc"
+
+./build/extractor "${OUTPUT_DIR}/${FILE_BASENAME}.ll" ${OUTPUT_DIR}
