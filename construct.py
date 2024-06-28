@@ -109,14 +109,16 @@ if __name__ == "__main__":
     cpp_files_size, cpp_files = map(list, zip(*sorted(zip(cpp_files_size, cpp_files))))
 
     files_to_process = cpp_files[-1 * args.max_num_source_files :]
+
+    """
     process_file(files_to_process[-1],
                 args.timeout,
                 args.output_root_dir,
                 args.default_testcase,
                 args.quiet_stdout, 
                 args.quiet_stderr)
-
     """
+
     with ProcessPoolExecutor() as executor:
         futures = [
             executor.submit(
@@ -132,4 +134,3 @@ if __name__ == "__main__":
         ]
         for future in futures:
             result = future.result()
-    """
