@@ -66,9 +66,9 @@ def process_file(p, timeout, output_root_dir, default_dir, quiet_stdout, quiet_s
     for e in exe_files:
         try:
             o = os.path.join(e + "_result/", "default/fuzzer_stats")
-            data["source"].append(p)
-            data["output"].append(o)
             with open(o, "r") as file:
+                data["source"].append(p)
+                data["output"].append(o)
                 for line in file:
                     key, value = line.split(":", 1)
                     key = key.strip()
