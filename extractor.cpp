@@ -180,9 +180,13 @@ struct FeatureExtractionPass
     void extractFeatures(Function &F)
     {
         // Loop and Post Dominator analysis
+        /*
+        // Too slow
         const DominatorTree DT(F);
         LoopInfo LI(DT);
+        */
         PostDominatorTree PDT(F);
+        
 
         // ------------- Extract CFG --------------
         for (BasicBlock &BB : F)
@@ -283,6 +287,8 @@ struct FeatureExtractionPass
 
             // Depth calculation
             bbf.depth = PDT.getNode(&BB)->getLevel();
+
+            /*
             // Loop nest level calculation
             int maxLoopDepth = 0;
             for (auto *L : LI.getLoopsInPreorder())
@@ -293,6 +299,7 @@ struct FeatureExtractionPass
                 }
             }
             bbf.loopNestLevel = maxLoopDepth;
+            */
 
             int numInstructions, distanceFromEntry;
             int numCalls, numLoads, numStores, numArith;
