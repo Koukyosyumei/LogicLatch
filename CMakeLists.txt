@@ -13,7 +13,7 @@ include_directories($(LLVM_C_INCLUDE_DIRS))
 add_definitions(${LLVM_DEFINITIONS})
 
 # Set LLVM libraries
-llvm_map_components_to_libnames(llvm_libs core support irreader)
+llvm_map_components_to_libnames(llvm_libs core support irreader analysis)
 
 # Add executable
 add_executable(extractor extractor.cpp)

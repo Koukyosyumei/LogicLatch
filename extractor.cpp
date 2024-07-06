@@ -57,8 +57,7 @@ int getDistanceFromEntry(BasicBlock *BB)
 
 int calculateLifetime(Instruction &I)
 {
-    // Simplified example of calculating variable lifetime within a block
-    // In practice, this would involve data flow analysis across blocks
+    // TODO: more precise data flow analysis across blocks
     if (isa<AllocaInst>(I))
     {
         int start = 0, end = 0;
@@ -78,8 +77,7 @@ int calculateLifetime(Instruction &I)
 
 int calculateCallDepth(CallInst *CI)
 {
-    // Placeholder for calculating call depth
-    // In practice, this requires more complex analysis
+    // TODO: this requires more complex analysis
     int depth = 0;
     Function *CalledFunc = CI->getCalledFunction();
     if (CalledFunc && !CalledFunc->isDeclaration())
@@ -97,7 +95,7 @@ int calculateCallDepth(CallInst *CI)
             }
         }
     }
-    return depth + 1; // Account for the current call
+    return depth + 1;
 }
 
 struct BBFeatures
@@ -181,14 +179,9 @@ struct FeatureExtractionPass
     void extractFeatures(Function &F)
     {
         // Loop and Post Dominator analysis
-        // LoopInfo LI;
-        // LoopInfoWrapperPass LIWP;
-        // LIWP.releaseMemory();
-        // LIWP.runOnFunction(F);
-        // PostDominatorTree PDT;
-        // PostDominatorTreeWrapperPass PDTWP;
-        // PDTWP.releaseMemory();
-        // PDTWP.runOnFunction(F);
+        const DominatorTree DT(F);
+        LoopInfo LI(DT);
+        PostDominatorTree PDT(F);
 
         // ------------- Extract CFG --------------
         for (BasicBlock &BB : F)
@@ -260,6 +253,7 @@ struct FeatureExtractionPass
 
                 /*
                 // Lifetime calculation
+                int lifetime = 0;
                 if (isa<AllocaInst>(I))
                 {
                     int varLifetime = calculateLifetime(I);
@@ -270,6 +264,7 @@ struct FeatureExtractionPass
                 }
 
                 // Call depth calculation
+                int callDepth = 0;
                 if (isa<CallInst>(I))
                 {
                     int depth = calculateCallDepth(dyn_cast<CallInst>(&I));
@@ -277,17 +272,14 @@ struct FeatureExtractionPass
                     {
                         callDepth = depth;
                     }
-                }
-                */
+                }*/
             }
 
             bbf.numPredecessors = std::distance(pred_begin(&BB), pred_end(&BB));
             bbf.numSuccessors = std::distance(succ_begin(&BB), succ_end(&BB));
 
-            /*
             // Depth calculation
             bbf.depth = PDT.getNode(&BB)->getLevel();
-
             // Loop nest level calculation
             int maxLoopDepth = 0;
             for (auto *L : LI.getLoopsInPreorder()) {
@@ -296,7 +288,6 @@ struct FeatureExtractionPass
                 }
             }
             bbf.loopNestLevel = maxLoopDepth;
-            */
 
             int numInstructions, distanceFromEntry;
             int numCalls, numLoads, numStores, numArith;
