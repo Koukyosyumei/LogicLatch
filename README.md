@@ -15,10 +15,10 @@ sh ./build.sh
 
 ## Usage
 
-- feature extrament
+- feature extraction
 
 ```bash
-sh extractor.sh example/simple.cpp
+sh extractor.sh ./example/simple.cpp ./example
 ```
 
 - instrument
