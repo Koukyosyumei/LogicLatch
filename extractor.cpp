@@ -106,12 +106,13 @@ struct BBFeatures
     int numPhi, numRet, numPredecessors, numSuccessors;
     int depth, loopNestLevel, numImmediates, numRegisters;
     int numLocalVars, numGlobalVars, numCondBranches, numUncondBranches;
+    int numIntArith;
     // int numInt = 0, numDominators = 0, numPostDominators = 0, lifetime = 0, callDepth = 0;
 
     BBFeatures() : numInstructions(0), distanceFromEntry(0), numCalls(0), numLoads(0), numStores(0),
                    numArith(0), numBranches(0), numCmp(0), numFP(0), numLogic(0), numMemAccess(0), numPhi(0),
                    numRet(0), numPredecessors(0), numSuccessors(0), depth(0), loopNestLevel(0), numImmediates(0),
-                   numRegisters(0), numLocalVars(0), numGlobalVars(0), numCondBranches(0), numUncondBranches(0) {}
+                   numRegisters(0), numLocalVars(0), numGlobalVars(0), numCondBranches(0), numUncondBranches(0), numIntArith(0) {}
 };
 
 struct FeatureExtractionPass
@@ -141,7 +142,7 @@ struct FeatureExtractionPass
                       << "numMemAccess" << "," << "numPhi" << "," << "numRet" << "," << "numPredecessors" << ","
                       << "numSuccessors" << "," << "depth" << "," << "loopNestLevel" << ","
                       << "numImmediates" << "," << "numRegisters" << "," << "numLocalVars" << ","
-                      << "numGlobalVars" << "," << "numCondBranches" << "," << "numUncondBranches" << "\n";
+                      << "numGlobalVars" << "," << "numCondBranches" << "," << "numUncondBranches" << "," << "numIntArith" << "\n";
     }
 
     void close()
@@ -218,6 +219,8 @@ struct FeatureExtractionPass
                     bbf.numStores++;
                 if (isa<BinaryOperator>(I))
                     bbf.numArith++;
+                if (isa<BinaryOperator>(I) && I.getType()->isIntegerTy())
+                    bbf.numIntArith++;
                 if (isa<BinaryOperator>(I) && I.getType()->isPointerTy())
                     bbf.numMemAccess++;
                 if (isa<BinaryOperator>(I) && isLogicalOperator(I))
@@ -282,8 +285,10 @@ struct FeatureExtractionPass
             bbf.depth = PDT.getNode(&BB)->getLevel();
             // Loop nest level calculation
             int maxLoopDepth = 0;
-            for (auto *L : LI.getLoopsInPreorder()) {
-                if (L->contains(&BB)) {
+            for (auto *L : LI.getLoopsInPreorder())
+            {
+                if (L->contains(&BB))
+                {
                     maxLoopDepth = std::max(maxLoopDepth, (int)LI.getLoopDepth(&BB));
                 }
             }
@@ -303,7 +308,7 @@ struct FeatureExtractionPass
                           << bbf.numMemAccess << "," << bbf.numPhi << "," << bbf.numRet << "," << bbf.numPredecessors << ","
                           << bbf.numSuccessors << "," << bbf.depth << "," << bbf.loopNestLevel << ","
                           << bbf.numImmediates << "," << bbf.numRegisters << "," << bbf.numLocalVars << ","
-                          << bbf.numGlobalVars << "," << bbf.numCondBranches << "," << bbf.numUncondBranches << "\n";
+                          << bbf.numGlobalVars << "," << bbf.numCondBranches << "," << bbf.numUncondBranches << "," << bbf.numIntArith << "\n";
 
             // Other features can be similarly computed...
         }
@@ -326,7 +331,8 @@ int main(int argc, char **argv)
 
     std::string BASE_FILE_NAME = argv[1];
     size_t last_dot = BASE_FILE_NAME.find_last_of('.');
-    if (last_dot != std::string::npos) {
+    if (last_dot != std::string::npos)
+    {
         BASE_FILE_NAME = BASE_FILE_NAME.substr(0, last_dot);
     }
 
