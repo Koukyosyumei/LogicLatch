@@ -18,6 +18,10 @@ namespace
             int num_cond_integer32 = 0;
             int num_cond_float = 0;
             int num_cond_others = 0;
+            int num_cond_u8_sequence = 0;
+            int num_strcmp_calls = 0;
+            int num_strncmp_calls = 0;
+            int num_memcmp_calls = 0;
 
             // Loop through each basic block in the function
             for (BasicBlock &BB : F)
@@ -25,6 +29,30 @@ namespace
                 // Loop through each instruction in the basic block
                 for (Instruction &I : BB)
                 {
+                    // Check if the instruction is a CallInst
+                    if (CallInst *CI = dyn_cast<CallInst>(&I))
+                    {
+                        Function *calledFunc = CI->getCalledFunction();
+                        if (calledFunc)
+                        {
+                            StringRef funcName = calledFunc->getName();
+
+                            // Check for strcmp
+                            if (funcName == "strcmp")
+                            {
+                                num_strcmp_calls++;
+                            }
+                            else if (funcName == "strncmp")
+                            {
+                                num_strncmp_calls++;
+                            }
+                            else if (funcName == "memcmp")
+                            {
+                                num_memcmp_calls++;
+                            }
+                        }
+                    }
+
                     // Check if the instruction is a BranchInst
                     if (BranchInst *BI = dyn_cast<BranchInst>(&I))
                     {
@@ -48,6 +76,18 @@ namespace
                             {
                                 num_cond_float++;
                             }
+                            else if (opA->getType()->isPointerTy() && opB->getType()->isPointerTy())
+                            {
+                                if (opA->getType()->getPointerElementType()->isIntegerTy(8) &&
+                                    opB->getType()->getPointerElementType()->isIntegerTy(8))
+                                {
+                                    num_cond_u8_sequence++;
+                                }
+                                else
+                                {
+                                    num_cond_others++;
+                                }
+                            }
                             else
                             {
                                 num_cond_others++;
@@ -57,7 +97,9 @@ namespace
                 }
             }
 
-            errs() << F.getName() << "," << num_cond_integer32 << "," << num_cond_float << "," << num_cond_double << "," << num_cond_others << "\n";
+            errs() << F.getName() << "," << num_cond_integer32 << "," << num_cond_float << ","
+                   << num_cond_double << "," << num_cond_u8_sequence << "," << num_strcmp_calls << "," 
+                   << num_strncmp_calls << "," << num_memcmp_calls << "\n";
 
             // Since this pass does not modify the function, return false
             return false;
