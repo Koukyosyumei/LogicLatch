@@ -14,7 +14,10 @@ namespace
 
         bool runOnFunction(Function &F) override
         {
-            errs() << "Function: " << F.getName() << "\n";
+            int num_cond_double = 0;
+            int num_cond_integer32 = 0;
+            int num_cond_float = 0;
+            int num_cond_others = 0;
 
             // Loop through each basic block in the function
             for (BasicBlock &BB : F)
@@ -25,7 +28,6 @@ namespace
                     // Check if the instruction is a BranchInst
                     if (BranchInst *BI = dyn_cast<BranchInst>(&I))
                     {
-                        errs() << "  Found BranchInst: " << *BI << "\n";
 
                         if (BI->isConditional() && isa<CmpInst>(BI->getCondition()))
                         {
@@ -34,27 +36,28 @@ namespace
                             auto *opB = CI->getOperand(1);
 
                             // assuming both operands are of the same type for conditional
-                            errs() << "    Conditional Branch: \n";
                             if (opA->getType()->isDoubleTy())
                             {
-                                errs() << "      double\n";
+                                num_cond_double++;
                             }
                             else if (opA->getType()->isIntegerTy(32))
                             {
-                                errs() << "      integer\n";
+                                num_cond_integer32++;
                             }
                             else if (opA->getType()->isFloatTy())
                             {
-                                errs() << "      float\n";
+                                num_cond_float++;
                             }
                             else
                             {
-                                errs() << "      other types\n";
+                                num_cond_others++;
                             }
                         }
                     }
                 }
             }
+
+            errs() << F.getName() << "," << num_cond_integer32 << "," << num_cond_float << "," << num_cond_double << "," << num_cond_others << "\n";
 
             // Since this pass does not modify the function, return false
             return false;
