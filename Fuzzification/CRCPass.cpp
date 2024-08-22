@@ -48,45 +48,12 @@ namespace
       FunctionType *WrapFloatType = FunctionType::get(FloatRetType, FloatParamType, false);
       Constant *WrapFloatFunc = llvm::cast<llvm::Constant>(F.getParent()->getOrInsertFunction("retWrapFloat", WrapFloatType).getCallee());
 
-      int num_cond_double = 0;
-      int num_cond_integer32 = 0;
-      int num_cond_float = 0;
-      int num_cond_others = 0;
-      int num_cond_u8_sequence = 0;
-      int num_strcmp_calls = 0;
-      int num_strncmp_calls = 0;
-      int num_memcmp_calls = 0;
-
       // Loop through each basic block in the function
       for (BasicBlock &BB : F)
       {
         // Loop through each instruction in the basic block
         for (Instruction &I : BB)
         {
-          // Check if the instruction is a CallInst
-          if (CallInst *CI = dyn_cast<CallInst>(&I))
-          {
-            Function *calledFunc = CI->getCalledFunction();
-            if (calledFunc)
-            {
-              StringRef funcName = calledFunc->getName();
-
-              // Check for strcmp
-              if (funcName == "strcmp")
-              {
-                num_strcmp_calls++;
-              }
-              else if (funcName == "strncmp")
-              {
-                num_strncmp_calls++;
-              }
-              else if (funcName == "memcmp")
-              {
-                num_memcmp_calls++;
-              }
-            }
-          }
-
           // Check if the instruction is a BranchInst
           if (BranchInst *BI = dyn_cast<BranchInst>(&I))
           {
@@ -94,46 +61,45 @@ namespace
             if (BI->isConditional() && isa<CmpInst>(BI->getCondition()))
             {
               CmpInst *CI = dyn_cast<CmpInst>(BI->getCondition());
+              Constant *currentConstantFunc = NULL;
+
               auto *opA = CI->getOperand(0);
               auto *opB = CI->getOperand(1);
+              auto argsA = llvm::ArrayRef<llvm::Value *>(&opA, 1);
+              auto argsB = llvm::ArrayRef<llvm::Value *>(&opB, 1);
+
+              bool modify = false;
 
               // assuming both operands are of the same type for conditional
               if (opA->getType()->isDoubleTy())
               {
-                num_cond_double++;
+                currentConstantFunc = ModDoubleFunc;
+                modify = true;
               }
               else if (opA->getType()->isIntegerTy(32))
               {
-                num_cond_integer32++;
+                currentConstantFunc = ModIntFunc;
+                modify = true;
               }
               else if (opA->getType()->isFloatTy())
               {
-                num_cond_float++;
+                currentConstantFunc = ModFloatFunc;
+                modify = true;
               }
-              else if (opA->getType()->isPointerTy() && opB->getType()->isPointerTy())
+
+              if (modify)
               {
-                if (opA->getType()->getPointerElementType()->isIntegerTy(8) &&
-                    opB->getType()->getPointerElementType()->isIntegerTy(8))
-                {
-                  num_cond_u8_sequence++;
-                }
-                else
-                {
-                  num_cond_others++;
-                }
-              }
-              else
-              {
-                num_cond_others++;
+                auto *ciA = llvm::CallInst::Create(currentConstantFunc, argsA, "funcA", CI);
+                auto *ciB = llvm::CallInst::Create(currentConstantFunc, argsB, "funcB", CI);
+
+                StringRef handler = cast<CallInst>(ciA)->getCalledFunction()->getName();
+                CI->setOperand(0, ciA);
+                CI->setOperand(1, ciB);
               }
             }
           }
         }
       }
-
-      errs() << F.getName() << "," << num_cond_integer32 << "," << num_cond_float << ","
-             << num_cond_double << "," << num_cond_u8_sequence << "," << num_strcmp_calls << ","
-             << num_strncmp_calls << "," << num_memcmp_calls << "\n";
 
       // Since this pass does not modify the function, return false
       return false;
