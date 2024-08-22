@@ -20,76 +20,17 @@ target triple = "aarch64-unknown-linux-gnu"
 %struct.__locale_data = type opaque
 %"class.std::num_put" = type { %"class.std::locale::facet.base", [4 x i8] }
 
+@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%lf\00", align 1
+@.str.2 = private unnamed_addr constant [3 x i8] c"%f\00", align 1
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_simple.cpp, i8* null }]
 @_ZStL8__ioinit = internal global %"class.std::ios_base::Init" zeroinitializer, align 1
 @__dso_handle = external hidden global i8
 @_ZSt3cin = external global %"class.std::basic_istream", align 8
 @_ZSt4cout = external global %"class.std::basic_ostream", align 8
-@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%lf\00", align 1
-@.str.2 = private unnamed_addr constant [3 x i8] c"%f\00", align 1
-
-; Function Attrs: noinline uwtable
-define internal void @_GLOBAL__sub_I_simple.cpp() #0 section ".text.startup" {
-  call void @__cxx_global_var_init()
-  ret void
-}
-
-; Function Attrs: noinline uwtable
-define internal void @__cxx_global_var_init() #0 section ".text.startup" {
-  call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1) @_ZStL8__ioinit)
-  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init", %"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #3
-  ret void
-}
-
-declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1)) unnamed_addr #1
-
-; Function Attrs: nounwind
-declare void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1)) unnamed_addr #2
-
-; Function Attrs: nounwind
-declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #3
-
-; Function Attrs: mustprogress noinline norecurse optnone uwtable
-define dso_local noundef i32 @main(i32 noundef %0, i8** noundef %1) #4 {
-  %3 = alloca i32, align 4
-  %4 = alloca i32, align 4
-  %5 = alloca i8**, align 8
-  %6 = alloca i32, align 4
-  %7 = alloca i32, align 4
-  store i32 0, i32* %3, align 4
-  store i32 %0, i32* %4, align 4
-  store i8** %1, i8*** %5, align 8
-  store i32 0, i32* %6, align 4
-  %8 = call noundef nonnull align 8 dereferenceable(16) %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* noundef nonnull align 8 dereferenceable(16) @_ZSt3cin, i32* noundef nonnull align 4 dereferenceable(4) %6)
-  store i32 0, i32* %7, align 4
-  %9 = load i32, i32* %6, align 4
-  %funcA = call i32 @modifyInt(i32 %9)
-  %funcB = call i32 @modifyInt(i32 0)
-  %10 = icmp eq i32 %funcA, %funcB
-  br i1 %10, label %11, label %12
-
-11:                                               ; preds = %2
-  store i32 1, i32* %7, align 4
-  br label %12
-
-12:                                               ; preds = %11, %2
-  %13 = load i32, i32* %7, align 4
-  %14 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i32 noundef %13)
-  %15 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %14, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-  ret i32 0
-}
-
-declare noundef nonnull align 8 dereferenceable(16) %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* noundef nonnull align 8 dereferenceable(16), i32* noundef nonnull align 4 dereferenceable(4)) #1
-
-declare noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8), i32 noundef) #1
-
-declare noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8)) #1
-
-declare noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8), %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef) #1
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local noundef i32 @_Z7reversej(i32 noundef %0) #5 {
+define dso_local noundef i32 @_Z7reversej(i32 noundef %0) #0 {
   %2 = alloca i32, align 4
   store i32 %0, i32* %2, align 4
   %3 = load i32, i32* %2, align 4
@@ -135,7 +76,7 @@ define dso_local noundef i32 @_Z7reversej(i32 noundef %0) #5 {
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local noundef i32 @_Z5crc32Pc(i8* noundef %0) #5 {
+define dso_local noundef i32 @_Z5crc32Pc(i8* noundef %0) #0 {
   %2 = alloca i8*, align 8
   %3 = alloca i32, align 4
   %4 = alloca i32, align 4
@@ -153,9 +94,7 @@ define dso_local noundef i32 @_Z5crc32Pc(i8* noundef %0) #5 {
   %11 = getelementptr inbounds i8, i8* %8, i64 %10
   %12 = load i8, i8* %11, align 1
   %13 = zext i8 %12 to i32
-  %funcA = call i32 @modifyInt(i32 %13)
-  %funcB = call i32 @modifyInt(i32 0)
-  %14 = icmp ne i32 %funcA, %funcB
+  %14 = icmp ne i32 %13, 0
   br i1 %14, label %15, label %48
 
 15:                                               ; preds = %7
@@ -174,18 +113,14 @@ define dso_local noundef i32 @_Z5crc32Pc(i8* noundef %0) #5 {
 
 24:                                               ; preds = %42, %15
   %25 = load i32, i32* %4, align 4
-  %funcA1 = call i32 @modifyInt(i32 %25)
-  %funcB2 = call i32 @modifyInt(i32 7)
-  %26 = icmp sle i32 %funcA1, %funcB2
+  %26 = icmp sle i32 %25, 7
   br i1 %26, label %27, label %45
 
 27:                                               ; preds = %24
   %28 = load i32, i32* %6, align 4
   %29 = load i32, i32* %5, align 4
   %30 = xor i32 %28, %29
-  %funcA3 = call i32 @modifyInt(i32 %30)
-  %funcB4 = call i32 @modifyInt(i32 0)
-  %31 = icmp slt i32 %funcA3, %funcB4
+  %31 = icmp slt i32 %30, 0
   br i1 %31, label %32, label %36
 
 32:                                               ; preds = %27
@@ -227,7 +162,7 @@ define dso_local noundef i32 @_Z5crc32Pc(i8* noundef %0) #5 {
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local i32 @modifyInt(i32 noundef %0) #5 {
+define dso_local i32 @modifyInt(i32 noundef %0) #0 {
   %2 = alloca i32, align 4
   %3 = alloca [200 x i8], align 1
   %4 = alloca i32, align 4
@@ -236,7 +171,7 @@ define dso_local i32 @modifyInt(i32 noundef %0) #5 {
   %6 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %7 = load i32, i32* %2, align 4
   %8 = add nsw i32 %7, 100000
-  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i64 0, i64 0), i32 noundef %8) #3
+  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i64 0, i64 0), i32 noundef %8) #4
   %10 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %11 = call noundef i32 @_Z5crc32Pc(i8* noundef %10)
   store i32 %11, i32* %4, align 4
@@ -251,10 +186,10 @@ define dso_local i32 @modifyInt(i32 noundef %0) #5 {
 }
 
 ; Function Attrs: nounwind
-declare i32 @sprintf(i8* noundef, i8* noundef, ...) #2
+declare i32 @sprintf(i8* noundef, i8* noundef, ...) #1
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local double @modifyDouble(double noundef %0) #5 {
+define dso_local double @modifyDouble(double noundef %0) #0 {
   %2 = alloca double, align 8
   %3 = alloca [200 x i8], align 1
   %4 = alloca double, align 8
@@ -263,7 +198,7 @@ define dso_local double @modifyDouble(double noundef %0) #5 {
   %6 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %7 = load double, double* %2, align 8
   %8 = fadd double %7, 1.000000e+05
-  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i64 0, i64 0), double noundef %8) #3
+  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i64 0, i64 0), double noundef %8) #4
   %10 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %11 = call noundef i32 @_Z5crc32Pc(i8* noundef %10)
   %12 = uitofp i32 %11 to double
@@ -279,7 +214,7 @@ define dso_local double @modifyDouble(double noundef %0) #5 {
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local float @modifyFloat(float noundef %0) #5 {
+define dso_local float @modifyFloat(float noundef %0) #0 {
   %2 = alloca float, align 4
   %3 = alloca [200 x i8], align 1
   %4 = alloca float, align 4
@@ -289,7 +224,7 @@ define dso_local float @modifyFloat(float noundef %0) #5 {
   %7 = load float, float* %2, align 4
   %8 = fpext float %7 to double
   %9 = fadd double %8, 1.000000e+05
-  %10 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str.2, i64 0, i64 0), double noundef %9) #3
+  %10 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str.2, i64 0, i64 0), double noundef %9) #4
   %11 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %12 = call noundef i32 @_Z5crc32Pc(i8* noundef %11)
   %13 = uitofp i32 %12 to float
@@ -305,7 +240,7 @@ define dso_local float @modifyFloat(float noundef %0) #5 {
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local i32 @retWrapInt(i32 noundef %0) #5 {
+define dso_local i32 @retWrapInt(i32 noundef %0) #0 {
   %2 = alloca i32, align 4
   %3 = alloca [200 x i8], align 1
   %4 = alloca i32, align 4
@@ -314,7 +249,7 @@ define dso_local i32 @retWrapInt(i32 noundef %0) #5 {
   %6 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %7 = load i32, i32* %2, align 4
   %8 = add nsw i32 %7, 100000
-  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i64 0, i64 0), i32 noundef %8) #3
+  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i64 0, i64 0), i32 noundef %8) #4
   %10 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %11 = call noundef i32 @_Z5crc32Pc(i8* noundef %10)
   store i32 %11, i32* %4, align 4
@@ -329,7 +264,7 @@ define dso_local i32 @retWrapInt(i32 noundef %0) #5 {
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local double @retWrapDouble(double noundef %0) #5 {
+define dso_local double @retWrapDouble(double noundef %0) #0 {
   %2 = alloca double, align 8
   %3 = alloca [200 x i8], align 1
   %4 = alloca double, align 8
@@ -338,7 +273,7 @@ define dso_local double @retWrapDouble(double noundef %0) #5 {
   %6 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %7 = load double, double* %2, align 8
   %8 = fadd double %7, 1.000000e+05
-  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i64 0, i64 0), double noundef %8) #3
+  %9 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i64 0, i64 0), double noundef %8) #4
   %10 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %11 = call noundef i32 @_Z5crc32Pc(i8* noundef %10)
   %12 = uitofp i32 %11 to double
@@ -354,7 +289,7 @@ define dso_local double @retWrapDouble(double noundef %0) #5 {
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local float @retWrapFloat(float noundef %0) #5 {
+define dso_local float @retWrapFloat(float noundef %0) #0 {
   %2 = alloca float, align 4
   %3 = alloca [200 x i8], align 1
   %4 = alloca float, align 4
@@ -364,7 +299,7 @@ define dso_local float @retWrapFloat(float noundef %0) #5 {
   %7 = load float, float* %2, align 4
   %8 = fpext float %7 to double
   %9 = fadd double %8, 1.000000e+05
-  %10 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str.2, i64 0, i64 0), double noundef %9) #3
+  %10 = call i32 (i8*, i8*, ...) @sprintf(i8* noundef %6, i8* noundef getelementptr inbounds ([3 x i8], [3 x i8]* @.str.2, i64 0, i64 0), double noundef %9) #4
   %11 = getelementptr inbounds [200 x i8], [200 x i8]* %3, i64 0, i64 0
   %12 = call noundef i32 @_Z5crc32Pc(i8* noundef %11)
   %13 = uitofp i32 %12 to float
@@ -379,14 +314,73 @@ define dso_local float @retWrapFloat(float noundef %0) #5 {
   ret float %19
 }
 
+; Function Attrs: noinline uwtable
+define internal void @_GLOBAL__sub_I_simple.cpp() #2 section ".text.startup" {
+  call void @__cxx_global_var_init()
+  ret void
+}
+
+; Function Attrs: noinline uwtable
+define internal void @__cxx_global_var_init() #2 section ".text.startup" {
+  call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1) @_ZStL8__ioinit)
+  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init", %"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #4
+  ret void
+}
+
+declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1)) unnamed_addr #3
+
+; Function Attrs: nounwind
+declare void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1)) unnamed_addr #1
+
+; Function Attrs: nounwind
+declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #4
+
+; Function Attrs: mustprogress noinline norecurse optnone uwtable
+define dso_local noundef i32 @main(i32 noundef %0, i8** noundef %1) #5 {
+  %3 = alloca i32, align 4
+  %4 = alloca i32, align 4
+  %5 = alloca i8**, align 8
+  %6 = alloca i32, align 4
+  %7 = alloca i32, align 4
+  store i32 0, i32* %3, align 4
+  store i32 %0, i32* %4, align 4
+  store i8** %1, i8*** %5, align 8
+  store i32 0, i32* %6, align 4
+  %8 = call noundef nonnull align 8 dereferenceable(16) %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* noundef nonnull align 8 dereferenceable(16) @_ZSt3cin, i32* noundef nonnull align 4 dereferenceable(4) %6)
+  store i32 0, i32* %7, align 4
+  %9 = load i32, i32* %6, align 4
+  %funcA = call i32 @modifyInt(i32 %9)
+  %funcB = call i32 @modifyInt(i32 0)
+  %10 = icmp eq i32 %funcA, %funcB
+  br i1 %10, label %11, label %12
+
+11:                                               ; preds = %2
+  store i32 1, i32* %7, align 4
+  br label %12
+
+12:                                               ; preds = %11, %2
+  %13 = load i32, i32* %7, align 4
+  %14 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i32 noundef %13)
+  %15 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %14, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  ret i32 0
+}
+
+declare noundef nonnull align 8 dereferenceable(16) %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* noundef nonnull align 8 dereferenceable(16), i32* noundef nonnull align 4 dereferenceable(4)) #3
+
+declare noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8), i32 noundef) #3
+
+declare noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8)) #3
+
+declare noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8), %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef) #3
+
 declare i8 @modifyBool(i8)
 
-attributes #0 = { noinline uwtable "frame-pointer"="non-leaf" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
-attributes #1 = { "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
-attributes #2 = { nounwind "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
-attributes #3 = { nounwind }
-attributes #4 = { mustprogress noinline norecurse optnone uwtable "frame-pointer"="non-leaf" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
-attributes #5 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"="non-leaf" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
+attributes #0 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"="non-leaf" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
+attributes #1 = { nounwind "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
+attributes #2 = { noinline uwtable "frame-pointer"="non-leaf" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
+attributes #3 = { "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
+attributes #4 = { nounwind }
+attributes #5 = { mustprogress noinline norecurse optnone uwtable "frame-pointer"="non-leaf" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+neon,+outline-atomics,+v8a" }
 
 !llvm.ident = !{!0, !0}
 !llvm.module.flags = !{!1, !2, !3, !4, !5, !6, !7, !8, !9}
