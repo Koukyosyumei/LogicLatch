@@ -1,9 +1,23 @@
 # Fuzzification
 
+- count
+
 ```bash
-cmake -S . -B build
-cmake --build build
+./script/build.sh
+
 opt -enable-new-pm=0 -f -load ./build/libBranchExtractorPass.so -branchextractor -S -o example/simple_sleep.ll example/simple.ll
+```
+
+- crc
+
+```bash
+./script/build.sh
+clang++ -S -emit-llvm crc.cpp -o crc.ll
+
+clang++ -S -emit-llvm example/simple.cpp -o example/simple.ll
+llvm-link -o example/simple_crc.ll example/simple.ll crc.ll
+opt -enable-new-pm=0 -load ./build/libCRCPass.so -crc-pass -S -o example/simple_crc_opt.ll example/simple_crc.ll
+clang++ -o example/simple_crc example/simple_crc_opt.ll
 ```
 
 ## Preparation

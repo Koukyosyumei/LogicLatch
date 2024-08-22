@@ -3,7 +3,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/Pass.h"
 #include "llvm/Support/raw_ostream.h"
-#include "crc.h"
+#include "crc.cpp"
 
 using namespace llvm;
 
@@ -87,10 +87,11 @@ namespace
                 modify = true;
               }
 
+              auto *Func = llvm::dyn_cast<llvm::Function>(currentConstantFunc);
               if (modify)
               {
-                auto *ciA = llvm::CallInst::Create(currentConstantFunc, argsA, "funcA", CI);
-                auto *ciB = llvm::CallInst::Create(currentConstantFunc, argsB, "funcB", CI);
+                auto *ciA = llvm::CallInst::Create(Func, argsA, "funcA", CI);
+                auto *ciB = llvm::CallInst::Create(Func, argsB, "funcB", CI);
 
                 StringRef handler = cast<CallInst>(ciA)->getCalledFunction()->getName();
                 CI->setOperand(0, ciA);

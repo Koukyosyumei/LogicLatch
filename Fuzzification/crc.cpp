@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+extern "C" {
+    int modifyInt(int in);
+    double modifyDouble(double in);
+    float modifyFloat(float in);
+    int retWrapInt(int in);
+    double retWrapDouble(double in);
+    float retWrapFloat(float in);
+}
+
 unsigned reverse(unsigned x) {
    x = ((x & 0x55555555) <<  1) | ((x >>  1) & 0x55555555);
    x = ((x & 0x33333333) <<  2) | ((x >>  2) & 0x33333333);
