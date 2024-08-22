@@ -142,4 +142,4 @@ namespace
 } // namespace
 
 char CRCPass::ID = 0;
-static RegisterPass<CRCPass> X("branchextractor", "Branch Instruction Extractor Pass", false, false);
+static RegisterPass<CRCPass> X("crc-pass", "Branch Obfuscation with CRC", false, false);
