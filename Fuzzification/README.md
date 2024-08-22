@@ -22,26 +22,21 @@ clang++ -o example/simple_crc example/simple_crc.ll crc.o
 
 ## Preparation
 
-- pcre2test
+### pcre2
 
+- repo: https://github.com/Koukyosyumei/pcre2/tree/fuzzification
+
+```bash
+mkdir build
+cd build
+cmake ..
+make
+
+cd ..
+file ./build/CMakeFiles/pcre2test.dir/src/pcre2test.c.o
+
+opt -enable-new-pm=0 -f -load ../../LogicLatch/Fuzzification/build/libCRCPass.so -crc-pass -S -o CMakeFiles/pcre2test.dir/src/pcre2test_crc.c.ll CMakeFiles/pcre2test.dir/src/pcre2test.c.o
+
+clang -DSUPPORT_PCRE2_8 -o pcre2test_crc CMakeFiles/pcre2test.dir/src/pcre2test_crc.c.ll ../../LogicLatch/Fuzzification/crc.o ../../old/pcre2/build/CMakeFiles/pcre2-8-static.dir/src/pcre2_context.c.o ../../old/pcre2/build/CMakeFiles/pcre2-8-static.dir/src/pcre2_match_data.c.o ../../old/pcre2/build/CMakeFiles/pcre2-8-static.dir/pcre2_chartables.c.o -lpcre2-8 -lpcre2-posix -lreadline
 ```
-IF(PCRE2_BUILD_TESTS)
-  ENABLE_TESTING()
 
-  SET(PCRE2TEST_SOURCES src/pcre2test.c)
-
-  set(CMAKE_C_COMPILER "clang")
-  *set(CMAKE_C_FLAGS "-flto")
-  *set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} "-flto")
-
-  IF(MSVC)
-    # This is needed to avoid a stack overflow error in the standard tests. The
-    # flag should be indicated with a forward-slash instead of a hyphen, but
-    # then CMake treats it as a file path.
-    SET(PCRE2TEST_LINKER_FLAGS -STACK:2500000)
-  ENDIF(MSVC)
-
-  ADD_EXECUTABLE(pcre2test ${PCRE2TEST_SOURCES})
-  *target_compile_options(pcre2test PUBLIC ${CMAKE_C_FLAGS} -flto)
-  set(targets ${targets} pcre2test)
-```

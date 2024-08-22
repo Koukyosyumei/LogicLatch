@@ -87,9 +87,9 @@ namespace
                 modify = true;
               }
 
-              auto *Func = llvm::dyn_cast<llvm::Function>(currentConstantFunc);
               if (modify)
               {
+                auto *Func = llvm::dyn_cast<llvm::Function>(currentConstantFunc);
                 auto *ciA = llvm::CallInst::Create(Func, argsA, "funcA", CI);
                 auto *ciB = llvm::CallInst::Create(Func, argsB, "funcB", CI);
 
