@@ -52,5 +52,21 @@ opt -enable-new-pm=0 -f -load ../LogicLatch/Fuzzification/build/libCRCPass.so -c
 clang -o contrib/libtests/readpng_crc contrib/libtests/readpng_crc.ll ../LogicLatch/Fuzzification/crc.o -I/usr/include/libpng16 -lpng
 ```
 
-### libjpeg
+### libtiff
+
+```bash
+cmake .
+make
+
+# clang tools/tiffinfo.c -o tools/tiffinfo -I port/ -I libtiff -L./libtiff -ltiff
+
+clang -S -emit-llvm tools/tiffinfo.c -o tools/tiffinfo.ll -I port/ -I libtiff
+opt -enable-new-pm=0 -f -load ../LogicLatch/Fuzzification/build/libCRCPass.so -crc-pass -S -o tools/tiffinfo_crc.ll tools/tiffinfo.ll
+
+clang -o tools/tiffinfo_crc tools/tiffinfo_crc.ll ../LogicLatch/Fuzzification/crc.o -L./libtiff -ltiff
+
+export LD_LIBRARY_PATH=./libtiff:$LD_LIBRARY_PATH
+```
+
+
 

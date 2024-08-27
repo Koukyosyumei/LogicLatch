@@ -16,6 +16,9 @@ namespace
 
     bool runOnFunction(Function &F) override
     {
+      int num_cond_double = 0;
+      int num_cond_integer32 = 0;
+      int num_cond_float = 0;
 
       // Define used function
       LLVMContext &Ctx = F.getContext();
@@ -74,16 +77,19 @@ namespace
               if (opA->getType()->isDoubleTy())
               {
                 currentConstantFunc = ModDoubleFunc;
+                num_cond_double++;
                 modify = true;
               }
               else if (opA->getType()->isIntegerTy(32))
               {
                 currentConstantFunc = ModIntFunc;
+                num_cond_integer32++;
                 modify = true;
               }
               else if (opA->getType()->isFloatTy())
               {
                 currentConstantFunc = ModFloatFunc;
+                num_cond_float++;
                 modify = true;
               }
 
@@ -102,7 +108,7 @@ namespace
         }
       }
 
-      // Since this pass does not modify the function, return false
+      errs() << F.getName() << "," << num_cond_integer32 << "," << num_cond_float << "," << num_cond_double << "\n";
       return false;
     }
   };
